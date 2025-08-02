@@ -1,0 +1,149 @@
+"use client"
+
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import Loading from './Loading';
+import { Minus, Plus } from 'lucide-react';
+import { useGlobalContext } from '@/providers/GlobalProvider';
+import { useAppDispatch, useAppSelector } from '@/store';
+import Axios from '@/utils/Axios';
+import SummaryApi from '@/common/SummaryApi';
+import AxiosToastError from '@/utils/AxiosToastError';
+import { handleAddItemCart } from '@/store/slice/cartProduct';
+
+interface ProductData {
+  _id: string;
+  [key: string]: any; // extend if you need more product fields
+}
+
+
+
+interface AddToCartButtonProps {
+  data: ProductData;
+}
+
+const AddToCartButton: React.FC<AddToCartButtonProps> = ({ data }) => {
+  const dispatch = useAppDispatch()
+  const { fetchCartItem, updateCartItem, deleteCartItem } = useGlobalContext();
+  const [loading, setLoading] = useState(false);
+  const cartItem = useAppSelector((state) => state.cartItem.cart as CartItem[]);
+  const [isAvailableCart, setIsAvailableCart] = useState(false);
+  const [qty, setQty] = useState(0);
+  const [cartItemDetails, setCartItemsDetails] = useState<CartItem | undefined>();
+
+  const handleADDTocart = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const newCartItem: CartItem = {
+  _id: data._id,              // product ID
+  quantity: 1,                // default quantity
+  productId: {
+    price: data.price,
+    discount: data.discount,
+    ...data,                  // if productId needs more properties
+  },
+};
+
+    try {
+      setLoading(true);
+dispatch(handleAddItemCart([...cartItem, newCartItem]));
+      
+console.log(data)
+
+      // thought api call 
+
+
+      // const response = await Axios({
+      //   ...SummaryApi.addTocart,
+      //   data: {
+      //     productId: data?._id,
+      //   },
+      // });
+
+      // const { data: responseData } = response;
+
+      // if (responseData.success) {
+      //   toast.success(responseData.message);
+      //   if (fetchCartItem) {
+      //     fetchCartItem();
+      //   }
+      // }
+    } catch (error) {
+      AxiosToastError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const checkingItem = cartItem.some((item) => item.productId._id === data._id);
+    setIsAvailableCart(checkingItem);
+
+    const product = cartItem.find((item) => item.productId._id === data._id);
+    setQty(product?.quantity || 0);
+    setCartItemsDetails(product);
+  }, [data, cartItem]);
+
+  const increaseQty = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!cartItemDetails) return;
+
+    const response = await updateCartItem(cartItemDetails._id, qty + 1);
+
+    if (response?.success) {
+      toast.success('Item added');
+    }
+  };
+
+  const decreaseQty = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!cartItemDetails) return;
+
+    if (qty === 1) {
+      deleteCartItem(cartItemDetails._id);
+    } else {
+      const response = await updateCartItem(cartItemDetails._id, qty - 1);
+      if (response?.success) {
+        toast.success('Item removed');
+      }
+    }
+  };
+
+  return (
+    <div className="w-full max-w-[150px]">
+      {isAvailableCart ? (
+        <div className="flex w-full h-full">
+          <button
+            onClick={decreaseQty}
+            className="bg-green-600 hover:bg-green-700 text-white flex-1 w-full p-1 rounded flex items-center justify-center"
+          >
+            <Minus />
+          </button>
+
+          <p className="flex-1 w-full font-semibold px-1 flex items-center justify-center">{qty}</p>
+
+          <button
+            onClick={increaseQty}
+            className="bg-green-600 hover:bg-green-700 text-white flex-1 w-full p-1 rounded flex items-center justify-center"
+          >
+            <Plus />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={handleADDTocart}
+          className="bg-green-600 hover:bg-green-700 text-white px-2 lg:px-4 py-1 rounded"
+        >
+          {loading ? <Loading /> : 'Add'}
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default AddToCartButton;

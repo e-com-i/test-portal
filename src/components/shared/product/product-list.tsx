@@ -1,4 +1,4 @@
-import { IProduct } from "@/public/types";
+
 import ProductCard from "./product-card";
 
 const ProductList = ({
