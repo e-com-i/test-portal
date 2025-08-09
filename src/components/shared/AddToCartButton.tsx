@@ -10,6 +10,7 @@ import Axios from '@/utils/Axios';
 import SummaryApi from '@/common/SummaryApi';
 import AxiosToastError from '@/utils/AxiosToastError';
 import { handleAddItemCart } from '@/store/slice/cartProduct';
+import { Button } from '../ui/button';
 
 interface ProductData {
   _id: string;
@@ -117,30 +118,31 @@ console.log(data)
   return (
     <div className="w-full max-w-[150px]">
       {isAvailableCart ? (
-        <div className="flex w-full h-full">
-          <button
+        <div className="flex bg-green-600 w-full h-full rounded">
+          <Button
             onClick={decreaseQty}
             className="bg-green-600 hover:bg-green-700 text-white flex-1 w-full p-1 rounded flex items-center justify-center"
           >
             <Minus />
-          </button>
+          </Button>
 
           <p className="flex-1 w-full font-semibold px-1 flex items-center justify-center">{qty}</p>
 
-          <button
+          <Button
             onClick={increaseQty}
             className="bg-green-600 hover:bg-green-700 text-white flex-1 w-full p-1 rounded flex items-center justify-center"
           >
             <Plus />
-          </button>
+          </Button>
         </div>
       ) : (
-        <button
+        <Button
           onClick={handleADDTocart}
-          className="bg-green-600 hover:bg-green-700 text-white px-2 lg:px-4 py-1 rounded"
+         className="bg-green-100 border border-green-700 text-green-700 px-2 lg:px-4 py-1 rounded-full text-sm font-medium"
+
         >
           {loading ? <Loading /> : 'Add'}
-        </button>
+        </Button>
       )}
     </div>
   );
