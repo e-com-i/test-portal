@@ -32,13 +32,13 @@ const Header = () => {
           <div className="hidden md:block">
             <SearchProducts />
           </div>
-
           <Menu />
         </div>
         {/* <div className="wrapper">
           <Categories />
         </div> */}
       </CardContent>
+      <p>9-aug</p>
     </Card>
   );
 };
