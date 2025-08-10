@@ -38,7 +38,7 @@ const Header = () => {
           <Categories />
         </div> */}
       </CardContent>
-      <p>9-aug</p>
+      <p>10-aug</p>
     </Card>
   );
 };

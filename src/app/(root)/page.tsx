@@ -97,7 +97,7 @@ const Homepage = () => {
           )
         })
       }
-      <CategoryCard categories={sampleCategories} />
+      {/* <CategoryCard categories={sampleCategories} /> */}
     </>
   );
 };

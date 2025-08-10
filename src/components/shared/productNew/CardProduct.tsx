@@ -62,7 +62,7 @@ const CardProduct: React.FC<CardProductProps> = ({ data }) => {
             {DisplayPriceInRupees(pricewithDiscount(data.price, data.discount))}
           </div>
           {Boolean(data.discount) && (
-            <div className="font-semibold text-gray-500 line-through">
+            <div className="font-semibold text-sm text-gray-500 line-through">
               {DisplayPriceInRupees(data.price)}
             </div>
           )}

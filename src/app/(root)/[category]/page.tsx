@@ -75,7 +75,7 @@ const category = params?.category?.split('-');
   <div className="container mx-auto flex">
     {/* Products */}
     <main className="flex flex-col">
-      <div className="bg-white shadow-md p-4 sticky top-20 z-10">
+      <div className="bg-white shadow-md p-4 sticky top-0 z-10">
         <h3 className="font-semibold">{categoryName}</h3>
       </div>
 
