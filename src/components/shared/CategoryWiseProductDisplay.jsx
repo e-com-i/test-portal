@@ -77,7 +77,7 @@ const CategoryWiseProductDisplay = ({ id, name }) => {
       </div>
       <div className="relative flex items-center ">
         <div
-          className=" flex gap-4 md:gap-6 lg:gap-8 container mx-auto px-4 overflow-x-scroll scrollbar-none scroll-smooth"
+          className=" flex gap-2 md:gap-4 lg:gap-6 container mx-auto px-4 overflow-x-scroll scrollbar-none scroll-smooth"
           ref={containerRef}
         >
           {loading &&

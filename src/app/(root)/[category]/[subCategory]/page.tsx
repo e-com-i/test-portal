@@ -98,7 +98,7 @@ const ProductListPage: React.FC = () => {
           <Link
             key={s._id}
             href={link}
-            className={`w-full p-2 lg:flex items-center lg:gap-4 border-b hover:bg-green-100 cursor-pointer ${
+            className={`w-full p-2 flex flex-col items-center border-b hover:bg-green-100 cursor-pointer ${
               subCategoryId === s._id ? 'bg-green-100' : ''
             }`}
           >
@@ -109,7 +109,7 @@ const ProductListPage: React.FC = () => {
                 className="w-14 h-14 object-contain"
               />
             </div>
-            <p className="text-xs lg:text-base text-center lg:text-left mt-2 lg:mt-0">
+            <p className="text-xs lg:text-xxs text-center lg:text-left lg:mt-0">
               {s.name}
             </p>
           </Link>
@@ -119,7 +119,7 @@ const ProductListPage: React.FC = () => {
 
     {/* Products */}
     <main className="flex flex-col">
-      <div className="bg-white shadow-md p-4 sticky top-20 z-10">
+      <div className="bg-white shadow-md p-4 sticky top-0 z-10">
         <h3 className="font-semibold">{subCategoryName}</h3>
       </div>
 
