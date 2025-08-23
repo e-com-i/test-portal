@@ -36,12 +36,44 @@ interface CartItem {
   stock: number;
 }
 
- interface SubCategory {
-  _id: string;
+//  interface SubCategory {
+//   _id: string;
+//   name: string;
+//   image: string;
+//   category: {
+//     _id: string;
+//     name: string;
+//   }[];
+// }
+
+
+// Interface for a single category item
+interface Category {
+  id: string;
   name: string;
+  order: number;
   image: string;
-  category: {
-    _id: string;
+}
+
+// Interface for the entire response from the API
+interface CategoryResponse {
+  total: number;
+  categories: Category[];
+}
+
+interface SubCategory {
+  id: string;
+  name: string;
+  order: number;
+  image: string;
+}
+
+interface SubCategoryResponse {
+  parent: {
+    id: string;
     name: string;
-  }[];
+  };
+  total: number;
+  subcategories: SubCategory[];
+  success: boolean; // assuming this field based on your code
 }

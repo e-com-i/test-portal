@@ -50,7 +50,8 @@ const SummaryApi = {
         method : 'post'
     },
     getCategory : {
-        url : '/api/category/get',
+        url : 'master/category/all.json',
+        // url : '/api/category/get',
         method : 'get'
     },
     updateCategory : {
@@ -66,7 +67,9 @@ const SummaryApi = {
         method : 'post'
     },
     getSubCategory : {
-        url : '/api/subcategory/get',
+        // url : '/api/subcategory/get',
+        url : 'master/category/attaricedal/sub-categories.json',
+        
         method : 'post'
     },
     updateSubCategory : {

@@ -8,7 +8,7 @@ import {TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({
   reducer: {
-     user : userReducer,
+    user : userReducer,
     product : productReducer,
     cartItem : cartReducer,
     addresses : addressReducer,

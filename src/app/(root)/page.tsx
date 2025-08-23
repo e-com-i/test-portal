@@ -6,15 +6,17 @@ import { sampleCategories } from "@/dummyData/CategoryCard";
 import { valideURLConvert } from "@/utils/valideURLConvert";
 import { useAppSelector } from "@/store";
 import { useRouter } from "next/navigation"; // ✅ for client-side navigation
-import { categoryData, subCategoryData } from "./product";
+import { subCategoryData } from "./product";
 
 const Homepage = () => {
   const router = useRouter(); // ✅ instead of navigate()
   const loadingCategory = useAppSelector(
     (state) => state.product.loadingCategory
   );
-  // const categoryData = useAppSelector((state) => state.product.allCategory);
+  const categoryData = useAppSelector((state) => state.product.allCategory);
   // const subCategoryData = useAppSelector((state) => state.product.allSubCategory);
+
+  console.log(categoryData)
 
   const banner =
     "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=2700/layout-engine/2022-05/Group-33704.jpg";
@@ -23,6 +25,8 @@ const Homepage = () => {
 
 
   const handleRedirectProductListpage = (id: string, name: string) => {
+
+    console.log(id, name)
     const subcategory = subCategoryData?.data.find((sub) =>
       sub.category.some((c) => c._id === id)
     );
@@ -67,11 +71,11 @@ const Homepage = () => {
                 <div className="bg-blue-100 h-8 rounded" />
               </div>
             ))
-          : categoryData?.data.map((cat) => (
+          : categoryData?.map((cat) => (
               <div
-                key={cat._id}
+                key={cat.id}
                 className="w-full h-full cursor-pointer"
-                onClick={() => handleRedirectProductListpage(cat._id, cat.name)}
+                onClick={() => handleRedirectProductListpage(cat.id, cat.name)}
               >
                 <div>
                   <img
@@ -86,7 +90,7 @@ const Homepage = () => {
 
       <div className="container mx-auto px-4 my-4 flex gap-4"></div>
 {/***display category product */}
-      {
+      {/* {
         categoryData?.data?.map((category,index)=>{
           return(
             <CategoryWiseProductDisplay
@@ -96,7 +100,7 @@ const Homepage = () => {
             />
           )
         })
-      }
+      } */}
       {/* <CategoryCard categories={sampleCategories} /> */}
     </>
   );
