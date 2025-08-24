@@ -26,16 +26,20 @@ const Homepage = () => {
 
   const handleRedirectProductListpage = (id: string, name: string) => {
 
-    console.log(id, name)
-    const subcategory = subCategoryData?.data.find((sub) =>
-      sub.category.some((c) => c._id === id)
-    );
+    // const subcategory = subCategoryData?.data.find((sub) =>
+    //   sub.category.some((c) => c._id === id)
+    // );
 
-    if (!subcategory) return;
+    // if (!subcategory) return;
+
+    // const url = `/${valideURLConvert(name)}-${id}/${valideURLConvert(
+    //   subcategory.name
+    // )}-${subcategory._id}`;
 
     const url = `/${valideURLConvert(name)}-${id}/${valideURLConvert(
-      subcategory.name
-    )}-${subcategory._id}`;
+      name)}-${id}`;
+
+    
     router.push(url); // ✅ correct navigation
   };
 
