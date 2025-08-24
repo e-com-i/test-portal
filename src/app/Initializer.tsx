@@ -53,16 +53,16 @@ export default function Initializer() {
     //   });
 
     //   const responseData = response.data;
-     const responseData = await fetchSubCategories();
+    //  const responseData = await fetchSubCategories();
 
-      if (responseData.success) {
-        // sort by name (localeCompare) and dispatch
-        dispatch(
-          setAllSubCategory(
-            responseData.subcategories.sort((a, b) => a.name.localeCompare(b.name))
-          )
-        );
-      }
+    //   if (responseData.success) {
+    //     // sort by name (localeCompare) and dispatch
+    //     dispatch(
+    //       setAllSubCategory(
+    //         responseData.subcategories.sort((a, b) => a.name.localeCompare(b.name))
+    //       )
+    //     );
+    //   }
     } catch (error) {
       // Optional: handle/log error here
       console.error('Failed to fetch subcategories:', error);

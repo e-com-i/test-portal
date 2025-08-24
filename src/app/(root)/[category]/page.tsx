@@ -35,18 +35,18 @@ const category = params?.category?.split('-');
     const fetchCategoryWiseProduct = async () => {
       try {
         setLoading(true);
-        const response = await Axios({
-          ...SummaryApi.getProductByCategory,
-          data: {
-            id: categoryId,
-          },
-        });
+        // const response = await Axios({
+        //   ...SummaryApi.getProductByCategory,
+        //   data: {
+        //     id: categoryId,
+        //   },
+        // });
   
-        const { data: responseData } = response;
+        // const { data: responseData } = response;
   
-        if (responseData.success) {
-          setData(responseData.data);
-        }
+        // if (responseData.success) {
+        //   setData(responseData.data);
+        // }
       } catch (error) {
         AxiosToastError(error);
       } finally {
