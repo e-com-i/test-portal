@@ -22,8 +22,20 @@ const Menu = () => {
   const user = useAppSelector((state) => state?.user);
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const cartItem = useAppSelector((state) => state.cartItem.cart);
+
+  console.log(cartItem)
   // const [totalPrice,setTotalPrice] = useState(0)
   // const [totalQty,setTotalQty] = useState(0)
+
+  const result = cartItem.reduce(
+  (acc, item) => {
+    acc.totalQuantity += item.quantity;
+    acc.totalPrice += item.quantity * item.productId.price;
+    return acc;
+  },
+  { totalQuantity: 0, totalPrice: 0 }
+);
+
   const { totalPrice, totalQty } = useGlobalContext();
   const [openCartSection, setOpenCartSection] = useState(false);
   return (
@@ -39,10 +51,13 @@ const Menu = () => {
             <ShoppingCart size={26} />
           </div>
           <div className="font-semibold text-sm">
-            {cartItem[0] ? (
+            {cartItem.length ? (
               <div>
-                <p>{totalQty} Items</p>
-                <p>{DisplayPriceInRupees(totalPrice)}</p>
+                {/* <p>{totalQty} Items</p>
+                <p>{DisplayPriceInRupees(totalPrice)}</p> */}
+
+           <p>{result?.totalQuantity} Items</p>
+                <p>{DisplayPriceInRupees(result?.totalPrice)}</p>
               </div>
             ) : (
               <p>My Cart</p>

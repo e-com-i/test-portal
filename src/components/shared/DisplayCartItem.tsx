@@ -10,6 +10,8 @@ import { DisplayPriceInRupees } from "@/utils/DisplayPriceInRupees";
 import { useAppSelector } from "@/store";
 import { pricewithDiscount } from "@/utils/PriceWithDiscount";
 import { useGlobalContext } from "@/providers/GlobalProvider";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const DisplayCartItem = ({ close }) => {
   const router = useRouter();
@@ -17,16 +19,82 @@ const DisplayCartItem = ({ close }) => {
   const cartItem = useAppSelector((state) => state.cartItem.cart);
   const user = useAppSelector((state) => state.user);
 
-  const redirectToCheckoutPage = () => {
-    if (user?._id) {
-      router.push("/checkout");
-      close?.();
-    } else {
-      toast("Please Login");
-    }
-  };
+  // const redirectToCheckoutPage = () => {
+  //   if (user?._id) {
+  //     router.push("/checkout");
+  //     close?.();
+  //   } else {
+  //     toast("Please Login");
+  //   }
+  // };
+
+const generatePdfInvoice = (): void => {
+  const doc = new jsPDF();
+
+  // Store Information
+  doc.setFontSize(16);
+  doc.text("Your Store Name", 14, 15);
+  doc.setFontSize(10);
+  doc.text("Your Store Address Line 1", 14, 22);
+  doc.text("Your Store Address Line 2", 14, 28);
+  doc.text("Phone: XXXXXXXX", 14, 34);
+  doc.text("Email: store@example.com", 14, 40);
+
+  // Title
+  doc.setFontSize(14);
+  doc.text("Invoice", 105, 50, { align: "center" });
+
+  // Prepare table columns and rows
+  const tableColumn = ["S.No", "Product Name", "Unit", "Quantity", "Price (₹)", "Total (₹)"];
+  const tableRows: (string | number)[][] = [];
+
+  cartItem.forEach((item, index) => {
+    tableRows.push([
+      index + 1,
+      item.productId.name,
+      item.productId.unit,
+      item.quantity,
+      item.productId.price.toFixed(2),
+      (item.quantity * item.productId.price).toFixed(2)
+    ]);
+  });
+
+  // Add table using autoTable plugin
+  autoTable(doc, {
+    head: [tableColumn],
+    body: tableRows,
+    startY: 55,
+  });
+
+  // Calculate totals
+  const totalQuantity = cartItem.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cartItem.reduce((sum, item) => sum + item.quantity * item.productId.price, 0);
+
+  // Get final Y coordinate of table and add summary
+  const finalY = (doc as any).lastAutoTable?.finalY || 65;
+  doc.text(`Total Quantity: ${totalQuantity}`, 14, finalY + 10);
+  doc.text(`Total Price: ₹${totalPrice.toFixed(2)}`, 14, finalY + 16);
+
+  // Payment terms
+  doc.text("Payment due within 15 days.", 14, finalY + 30);
+  doc.text("Thank you for your business!", 14, finalY + 36);
+
+  // Save the PDF
+  doc.save("invoice.pdf");
+};
+
+
 
   console.log(cartItem)
+
+    const result = cartItem.reduce(
+  (acc, item) => {
+    acc.totalQuantity += item.quantity;
+    acc.totalPrice += item.quantity * item.productId.price;
+    return acc;
+  },
+  { totalQuantity: 0, totalPrice: 0 }
+);
 
   return (
     <section className="bg-neutral/90 fixed top-0 bottom-0 right-0 left-0 inset-0 bg-black/50 z-50">
@@ -82,15 +150,17 @@ const DisplayCartItem = ({ close }) => {
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Items total</p>
                   <p className="flex items-center gap-2">
-                    <span className="line-through text-neutral-400">
+                    {/* <span className="line-through text-neutral-400">
                       {DisplayPriceInRupees(notDiscountTotalPrice)}
-                    </span>
-                    <span>{DisplayPriceInRupees(totalPrice)}</span>
+                    </span> */}
+                    {/* <span>{DisplayPriceInRupees(totalPrice)}</span> */}
+                    <span>{DisplayPriceInRupees(result?.totalPrice)}</span>
                   </p>
                 </div>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Quantity total</p>
-                  <p>{totalQty} item</p>
+                  {/* <p>{totalQty} item</p> */}
+                  <p>{result?.totalQuantity} item</p>
                 </div>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Delivery Charge</p>
@@ -98,7 +168,8 @@ const DisplayCartItem = ({ close }) => {
                 </div>
                 <div className="font-semibold flex items-center justify-between gap-4">
                   <p>Grand total</p>
-                  <p>{DisplayPriceInRupees(totalPrice)}</p>
+                  {/* <p>{DisplayPriceInRupees(totalPrice)}</p> */}
+                  <p>{DisplayPriceInRupees(result?.totalPrice)}</p>
                 </div>
               </div>
             </>
@@ -123,8 +194,10 @@ const DisplayCartItem = ({ close }) => {
         {cartItem.length > 0 && (
           <div className="p-2">
             <div className="bg-green-700 text-neutral-100 px-4 font-bold text-base py-4 static bottom-3 rounded flex items-center gap-4 justify-between">
-              <div>{DisplayPriceInRupees(totalPrice)}</div>
-              <button onClick={redirectToCheckoutPage} className="flex items-center gap-1">
+              {/* <div>{DisplayPriceInRupees(totalPrice)}</div> */}
+              <div>{DisplayPriceInRupees(result?.totalPrice)}</div>
+              {/* <button onClick={redirectToCheckoutPage} className="flex items-center gap-1"> */}
+              <button onClick={generatePdfInvoice} className="flex items-center gap-1">
                 Proceed
                 <span>
                   <ChevronRight />
