@@ -19,3 +19,11 @@ export const ProprietorInfo = {
   name: "Mr. Mahendra Gupta",
   contact: "08045800107",
 };
+
+export const countryCodeOptions = [
+   { label: "+91 India", value: "+91" },
+  { label: "+1 USA", value: "+1" },
+  { label: "+44 UK", value: "+44" },
+ 
+  // Add more country codes here
+];

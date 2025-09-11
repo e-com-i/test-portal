@@ -41,3 +41,18 @@ export const fetchProducts = async () => {
     throw error;
   }
 };
+
+export const fetchProductsBySubCategory = async (
+  categoryId: string,
+  subCategoryId: string
+): Promise<ProductResponse> => {
+  try {
+    const response = await axios.get<ProductResponse>(
+      `${baseURL}/master/category/${categoryId}/sub-category/${subCategoryId}/products.json`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching products by subcategory:", error);
+    throw error;
+  }
+};

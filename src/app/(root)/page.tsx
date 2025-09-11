@@ -7,6 +7,7 @@ import { valideURLConvert } from "@/utils/valideURLConvert";
 import { useAppSelector } from "@/store";
 import { useRouter } from "next/navigation"; // ✅ for client-side navigation
 import { subCategoryData } from "./product";
+import { fetchSubCategories } from "@/lib/api";
 
 const Homepage = () => {
   const router = useRouter(); // ✅ instead of navigate()
@@ -22,7 +23,7 @@ const Homepage = () => {
     "https://cdn.pixabay.com/photo/2024/11/17/04/52/chilli-9202873_1280.jpg";
 
 
-  const handleRedirectProductListpage = (id: string, name: string) => {
+  const handleRedirectProductListpage = async(id: string, name: string) => {
 
     // const subcategory = subCategoryData?.data.find((sub) =>
     //   sub.category.some((c) => c._id === id)
@@ -33,9 +34,10 @@ const Homepage = () => {
     // const url = `/${valideURLConvert(name)}-${id}/${valideURLConvert(
     //   subcategory.name
     // )}-${subcategory._id}`;
+    const responseData = await fetchSubCategories(id);
 
     const url = `/${valideURLConvert(name)}-${id}/${valideURLConvert(
-      name)}-${id}`;
+      responseData?.parent?.name)}-${responseData?.parent?.id}`;
 
     
     router.push(url); // ✅ correct navigation
