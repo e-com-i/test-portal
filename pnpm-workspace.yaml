@@ -3,6 +3,7 @@ ignoredBuiltDependencies:
   - '@prisma/engines'
   - '@tailwindcss/oxide'
   - bufferutil
+  - core-js
   - esbuild
   - msgpackr-extract
   - prisma

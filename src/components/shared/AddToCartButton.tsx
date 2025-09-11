@@ -50,6 +50,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ data }) => {
       setLoading(true);
 dispatch(handleAddItemCart([...cartItem, newCartItem]));
       
+
 console.log(data)
 
       // thought api call 
