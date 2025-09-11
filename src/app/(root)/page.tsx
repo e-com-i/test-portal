@@ -16,8 +16,6 @@ const Homepage = () => {
   const categoryData = useAppSelector((state) => state.product.allCategory);
   // const subCategoryData = useAppSelector((state) => state.product.allSubCategory);
 
-  console.log(categoryData)
-
   const banner =
     "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=2700/layout-engine/2022-05/Group-33704.jpg";
   const bannerMobile =
@@ -75,7 +73,7 @@ const Homepage = () => {
                 <div className="bg-blue-100 h-8 rounded" />
               </div>
             ))
-          : categoryData?.map((cat) => (
+          : categoryData && categoryData?.map((cat) => (
               <div
                 key={cat.id}
                 className="w-full h-full cursor-pointer"
