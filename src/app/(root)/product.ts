@@ -119,6 +119,8 @@ export const categoryData = {
     "success": true
 }
 
+
+
 export const subCategoryData= {
     "message": "Sub Category data",
     "data": [
