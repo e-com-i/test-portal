@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { CircleX, ChevronRight } from "lucide-react";
 import AddToCartButton from "./AddToCartButton";
 import imageEmpty from "@/assets/images/empty_cart.webp";
@@ -12,6 +12,7 @@ import { pricewithDiscount } from "@/utils/PriceWithDiscount";
 import { useGlobalContext } from "@/providers/GlobalProvider";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import CustomerDetailsModal from "../CustomerDetailsModal";
 
 const DisplayCartItem = ({ close }) => {
   const router = useRouter();
@@ -19,16 +20,17 @@ const DisplayCartItem = ({ close }) => {
   const cartItem = useAppSelector((state) => state.cartItem.cart);
   const user = useAppSelector((state) => state.user);
 
-  // const redirectToCheckoutPage = () => {
-  //   if (user?._id) {
-  //     router.push("/checkout");
-  //     close?.();
-  //   } else {
-  //     toast("Please Login");
-  //   }
-  // };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-const generatePdfInvoice = (): void => {
+  const handleOpenModal = () => setIsModalOpen(true);
+
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleFormSubmit = (values: FormValues) => {
+    console.log("Customer Data Submitted:", values);
+
+
+
   const doc = new jsPDF();
 
   // Store Information
@@ -80,8 +82,19 @@ const generatePdfInvoice = (): void => {
   doc.text("Thank you for your business!", 14, finalY + 36);
 
   // Save the PDF
-  doc.save("invoice.pdf");
-};
+  // doc.save("invoice.pdf");
+  };
+
+  // const redirectToCheckoutPage = () => {
+  //   if (user?._id) {
+  //     router.push("/checkout");
+  //     close?.();
+  //   } else {
+  //     toast("Please Login");
+  //   }
+  // };
+
+
 
 
 
@@ -197,7 +210,7 @@ const generatePdfInvoice = (): void => {
               {/* <div>{DisplayPriceInRupees(totalPrice)}</div> */}
               <div>{DisplayPriceInRupees(result?.totalPrice)}</div>
               {/* <button onClick={redirectToCheckoutPage} className="flex items-center gap-1"> */}
-              <button onClick={generatePdfInvoice} className="flex items-center gap-1">
+              <button onClick={() =>setIsModalOpen(true)} className="flex items-center gap-1">
                 Proceed
                 <span>
                   <ChevronRight />
@@ -206,6 +219,11 @@ const generatePdfInvoice = (): void => {
             </div>
           </div>
         )}
+        <CustomerDetailsModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleFormSubmit}
+      />
       </div>
     </section>
   );

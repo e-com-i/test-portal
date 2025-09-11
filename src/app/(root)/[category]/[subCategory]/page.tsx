@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 import { RootState } from "@/store";
 import dummyData from "./dummyData.json";
 import { subCategoryData } from "../../product";
-import { fetchSubCategories } from "@/lib/api";
+import { fetchProductsBySubCategory, fetchSubCategories } from "@/lib/api";
 
 const ProductListPage: React.FC = () => {
   const [data, setData] = useState<Product[]>([]);
@@ -54,6 +54,8 @@ const ProductListPage: React.FC = () => {
       //   },
       // });
       const responseData = await fetchSubCategories(categoryId);
+
+      const products = await fetchProductsBySubCategory(categoryId, subCategoryId);
       // const { data: responseData } = response;
 
       // if (responseData.success) {
@@ -66,7 +68,7 @@ const ProductListPage: React.FC = () => {
       //   setTotalPage(responseData.totalCount);
       // }
       setDisplaySubCategory(responseData?.subcategories);
-      setData(dummyData.data);
+      setData(products?.products);
       setTotalPage(dummyData.totalCount);
     } catch (error) {
       AxiosToastError(error);

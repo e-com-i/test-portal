@@ -77,3 +77,44 @@ interface SubCategoryResponse {
   subcategories: SubCategory[];
   success: boolean; // assuming this field based on your code
 }
+
+ interface ParentCategory {
+  category_id: string;
+  category_name: string;
+  subcategory_id: string;
+  subcategory_name: string;
+}
+
+ interface ProductMoreDetails {
+  "Key Features": string;
+  "Storage Tips": string;
+  Type: string;
+  "Shelf Life": string;
+  "Manufacturer Details": string;
+  "Marketed By": string;
+  "Return Policy": string;
+}
+
+ interface Product {
+  _id: string;
+  name: string;
+  image: string[];
+  category: string[];
+  subCategory: string[];
+  unit: string;
+  stock: number;
+  price: number;
+  discount: number;
+  description: string;
+  more_details: ProductMoreDetails;
+  publish: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+ interface ProductResponse {
+  parent: ParentCategory;
+  total: number;
+  products: Product[];
+}

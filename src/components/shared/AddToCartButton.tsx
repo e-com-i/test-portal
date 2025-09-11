@@ -45,7 +45,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ data }) => {
     ...data,                  // if productId needs more properties
   },
 };
-
+console.log("456789")
     try {
       setLoading(true);
 dispatch(handleAddItemCart([...cartItem, newCartItem]));
