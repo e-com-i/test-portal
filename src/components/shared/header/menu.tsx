@@ -72,9 +72,9 @@ const Menu = () => {
           asChild
           className="flex items-center gap-2 bg-white hover:bg-green-700 px-3 py-2 rounded text-primary"
         >
-          <Link href="/sign-in">
+          {/* <Link href="/sign-in">
             <UserIcon /> Sign In
-          </Link>
+          </Link> */}
         </Button>
       </nav>
       <nav className="md:hidden">
@@ -112,9 +112,9 @@ const Menu = () => {
               asChild
               className="flex items-center gap-2  px-3 py-2 rounded"
             >
-              <Link href="/sign-in">
+              {/* <Link href="/sign-in">
                 <UserIcon /> Sign In
-              </Link>
+              </Link> */}
             </Button>
             <SheetDescription></SheetDescription>
           </SheetContent>

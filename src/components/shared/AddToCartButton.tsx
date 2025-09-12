@@ -153,7 +153,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ data }) => {
   return (
     <div className="w-full max-w-[150px]">
       {isAvailableCart ? (
-        <div className="flex bg-green-600 w-full h-full text-white rounded">
+        <div className="flex bg-green-600 w-full text-white rounded">
           <Button
             onClick={decreaseQty}
             className="bg-green-600 hover:bg-green-700 flex-1 w-full p-1 rounded flex items-center justify-center"

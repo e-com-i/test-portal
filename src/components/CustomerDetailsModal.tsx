@@ -2,7 +2,7 @@
 "use client";
 
 import React from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -75,7 +75,7 @@ const CustomerDetailsModal: React.FC<Props> = ({
                 >
                   Full Name
                 </label>
-                <Input id="fullName" name="fullName" />
+                <Field id="fullName" name="fullName" as={Input} />
                 <ErrorMessage
                   name="fullName"
                   component="div"
@@ -91,7 +91,8 @@ const CustomerDetailsModal: React.FC<Props> = ({
                 >
                   Email
                 </label>
-                <Input id="email" name="email" type="email" />
+                <Field id="email" name="email" type="email" as={Input} />
+        
                 <ErrorMessage
                   name="email"
                   component="div"
@@ -109,11 +110,10 @@ const CustomerDetailsModal: React.FC<Props> = ({
                     Country Code
                   </label>
 
-                  <Select
-                    label="Country Code"
+                 
+                    <Field label="Country Code"
                     name="countryCode"
-                    options={countryCodeOptions}
-                  />
+                    options={countryCodeOptions} as={Select} />
                   <ErrorMessage
                     name="countryCode"
                     component="div"
@@ -128,7 +128,8 @@ const CustomerDetailsModal: React.FC<Props> = ({
                   >
                     Phone Number
                   </label>
-                  <Input id="phone" name="phone" />
+                   <Field id="phone" name="phone" as={Input} />
+                 
                   <ErrorMessage
                     name="phone"
                     component="div"
@@ -145,7 +146,7 @@ const CustomerDetailsModal: React.FC<Props> = ({
                 >
                   Address (Optional)
                 </label>
-                <Textarea id="address" name="address" rows={3} />
+                 <Field id="address" name="address" rows={3} as={Textarea} />
                 <ErrorMessage
                   name="address"
                   component="div"
