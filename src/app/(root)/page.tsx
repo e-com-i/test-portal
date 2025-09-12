@@ -37,8 +37,7 @@ const Homepage = () => {
     const responseData = await fetchSubCategories(id);
 
     const url = `/${valideURLConvert(name)}-${id}/${valideURLConvert(
-      responseData?.parent?.name)}-${responseData?.parent?.id}`;
-
+      responseData?.parent?.name)}-${responseData?.subcategories[0]?.id}`;
     
     router.push(url); // ✅ correct navigation
   };

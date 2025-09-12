@@ -22,11 +22,16 @@ interface CardProductProps {
 // /product/nandini-toned-milk/productid/37083
 const CardProduct: React.FC<CardProductProps> = ({ data }) => {
   const url = `/product/${valideURLConvert(data.name)}/productid/${data._id}`;
-  const [loading, setLoading] = useState(false);
+
+   const handleClick = () => {
+    // Save product data in localStorage (stringify to store objects)
+    localStorage.setItem("productDetails", JSON.stringify(data));
+  };
 
   return (
     <Link
       href={url}
+      onClick={handleClick}
       className="border relative py-2 lg:p-4 grid gap-1 lg:gap-3 min-w-30 lg:min-w-45 rounded cursor-pointer bg-white"
     >
       <div className="min-h-20 w-full max-h-24 lg:max-h-32 rounded overflow-hidden">
