@@ -3,10 +3,10 @@ import { Inter } from "next/font/google";
 import "@/assets/styles/globals.css";
 import { APP_DESCRIPTION, APP_NAME, SERVER_URL } from "@/lib/constants";
 import { ThemeProvider } from "next-themes";
-import { Toaster } from "sonner";
 import ReduxProvider from "@/providers/ReduxProvider";
 import Initializer from "./Initializer";
 import GlobalProvider from "@/providers/GlobalProvider";
+import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

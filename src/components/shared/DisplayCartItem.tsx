@@ -10,100 +10,131 @@ import { DisplayPriceInRupees } from "@/utils/DisplayPriceInRupees";
 import { useAppSelector } from "@/store";
 import { pricewithDiscount } from "@/utils/PriceWithDiscount";
 import { useGlobalContext } from "@/providers/GlobalProvider";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { generateInvoicePdf } from "@/utils/generateInvoicePdf";
 import CustomerDetailsModal from "../CustomerDetailsModal";
 
 interface DisplayCartItem {
-  close: boolean
+  close: () => void;
 }
 
-const DisplayCartItem:FunctionComponent<DisplayCartItem> = ({ close }) => {
+const DisplayCartItem: FunctionComponent<DisplayCartItem> = ({ close }) => {
   const router = useRouter();
   const { notDiscountTotalPrice, totalPrice, totalQty } = useGlobalContext();
   const cartItem = useAppSelector((state) => state.cartItem.cart);
   const user = useAppSelector((state) => state.user);
 
+  // Use NEXT_PUBLIC_ prefix for env variables accessible in the browser
+  const ACCESS_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [status, setStatus] = useState("");
 
   const handleOpenModal = () => setIsModalOpen(true);
-
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleFormSubmit = (values: FormValues) => {
+  const handleFormSubmit = async (values: FormValues) => {
+    if (!ACCESS_KEY) {
+      console.error("Missing ACCESS_KEY");
+      toast.error("Configuration error, try again later.");
+      return;
+    }
 
-  const doc = new jsPDF();
+    const submitData = new FormData();
+    submitData.append("access_key", ACCESS_KEY);
+    submitData.append("fullName", values.fullName);
+    submitData.append("email", values.email);
+    submitData.append("countryCode", values.countryCode); // fixed key usage
+    submitData.append("phone", values.phone);
+    submitData.append("address", values.address || "");
 
-  // Store Information
-  doc.setFontSize(16);
-  doc.text("Your Store Name", 14, 15);
-  doc.setFontSize(10);
-  doc.text("Your Store Address Line 1", 14, 22);
-  doc.text("Your Store Address Line 2", 14, 28);
-  doc.text("Phone: XXXXXXXX", 14, 34);
-  doc.text("Email: store@example.com", 14, 40);
+    // Order information
+    submitData.append("order_date", new Date().toISOString());
+    submitData.append("order_items_count", cartItem.length.toString());
+    submitData.append("grand_total", totalPrice.toFixed(2));
 
-  // Title
-  doc.setFontSize(14);
-  doc.text("Invoice", 105, 50, { align: "center" });
+    cartItem.forEach((item, index) => {
+      submitData.append(`product_${index + 1}_id`, item._id);
+      submitData.append(`product_${index + 1}_name`, item.productId.name);
+      submitData.append(
+        `product_${index + 1}_price`,
+        pricewithDiscount(
+          item.productId.price,
+          item.productId.discount
+        ).toString()
+      );
+      submitData.append(
+        `product_${index + 1}_quantity`,
+        item.quantity.toString()
+      );
+      submitData.append(
+        `product_${index + 1}_total`,
+        (item.productId.price * item.quantity).toFixed(2)
+      );
+    });
+    const detailedMessage = `
+🛒 NEW ECOMMERCE ORDER RECEIVED!
 
-  // Prepare table columns and rows
-  const tableColumn = ["S.No", "Product Name", "Unit", "Quantity", "Price (₹)", "Total (₹)"];
-  const tableRows: (string | number)[][] = [];
+📋 ORDER DETAILS:
 
-  cartItem.forEach((item, index) => {
-    tableRows.push([
-      index + 1,
-      item.productId.name,
-      item.productId.unit,
-      item.quantity,
-      item.productId.price.toFixed(2),
-      (item.quantity * item.productId.price).toFixed(2)
-    ]);
-  });
+Order Date: ${new Date().toISOString()}
+Total Items: ${cartItem.length}
 
-  // Add table using autoTable plugin
-  autoTable(doc, {
-    head: [tableColumn],
-    body: tableRows,
-    startY: 55,
-  });
+👤 CUSTOMER INFORMATION:
+Name: ${values.fullName}
+Email: ${values.email}
+countryCode: ${values.countryCode}
+Phone: ${values.phone}
+Address: ${values.address}
 
-  // Calculate totals
-  const totalQuantity = cartItem.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cartItem.reduce((sum, item) => sum + item.quantity * item.productId.price, 0);
 
-  // Get final Y coordinate of table and add summary
-  const finalY = (doc as any).lastAutoTable?.finalY || 65;
-  doc.text(`Total Quantity: ${totalQuantity}`, 14, finalY + 10);
-  doc.text(`Total Price: ₹${totalPrice.toFixed(2)}`, 14, finalY + 16);
 
-  // Payment terms
-  doc.text("Payment due within 15 days.", 14, finalY + 30);
-  doc.text("Thank you for your business!", 14, finalY + 36);
+💰 ORDER SUMMARY:
+Subtotal: $${totalPrice}
+GRAND TOTAL: $${totalPrice}
 
-  // Save the PDF
-  // doc.save("invoice.pdf");
+⚡ This order was automatically generated from your ecommerce website.
+Please process this order and contact the customer for payment confirmation.
+      `;
+    // submitData.append('ccemail', 'sales@company.com;manager@company.com;orders@company.com;sanjeev.kukanur@gmail.com');
+    // submitData.append('bccemail', 'backup@company.com');
+    submitData.append("message", detailedMessage);
+    // Send additional metadata
+    submitData.append("website_url", window.location.origin);
+    submitData.append("user_agent", navigator.userAgent);
+    submitData.append("order_status", "Pending Payment");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: submitData,
+      });
+
+      const result = await response.json();
+
+      console.log(response);
+      if (result.success) {
+        setStatus("success");
+        generateInvoicePdf(cartItem, result.data);
+        toast.success("Form submitted successfully");
+        setTimeout(() => setStatus(""), 5000);
+      } else {
+        setStatus("error");
+        toast.error("Form submission error");
+        console.error("Form submission error:", result);
+      }
+    } catch (error) {
+      setStatus("error");
+      toast.error("Network error");
+      console.error("Network error:", error);
+    }
   };
 
-  // const redirectToCheckoutPage = () => {
-  //   if (user?._id) {
-  //     router.push("/checkout");
-  //     close?.();
-  //   } else {
-  //     toast("Please Login");
-  //   }
-  // };
-
-
-console.log( totalPrice)
-
   return (
-    <section className="bg-neutral/90 fixed top-0 bottom-0 right-0 left-0 inset-0 bg-black/50 z-50">
+    <section className="bg-neutral/90 fixed inset-0 bg-black/50 z-50">
       <div className="bg-white w-full max-w-sm min-h-screen max-h-screen ml-auto">
         <div className="flex items-center p-4 shadow-md gap-3 justify-between">
           <h2 className="font-semibold">Cart</h2>
-          <Link href="/" className="lg:hidden">
+          <Link href="/" className="lg:hidden" onClick={close}>
             <CircleX size={25} />
           </Link>
           <button onClick={close} className="hidden lg:block">
@@ -111,38 +142,44 @@ console.log( totalPrice)
           </button>
         </div>
 
-        <div className="min-h-[75vh] lg:min-h-[80vh] h-full max-h-[calc(100vh-150px)] bg-blue-50 p-2 flex flex-col gap-4">
+        <div className="min-h-[75vh] lg:min-h-[80vh] h-full max-h-[calc(100vh-150px)] bg-blue-50 p-2 flex flex-col gap-4 overflow-auto">
           {cartItem.length > 0 ? (
             <>
               <div className="flex items-center justify-between px-4 py-2 bg-blue-100 text-blue-500 rounded-full">
                 <p>Your total savings</p>
-                <p>{DisplayPriceInRupees(notDiscountTotalPrice - totalPrice)}</p>
+                <p>
+                  {DisplayPriceInRupees(notDiscountTotalPrice - totalPrice)}
+                </p>
               </div>
 
-              <div className="bg-white rounded-lg p-4 grid gap-5 overflow-auto">
+              <div className="bg-white rounded-lg p-4 grid gap-5">
                 {cartItem.map((item) => (
-                  <div key={item?._id + "cartItemDisplay"} className="flex w-full gap-4">
+                  <div
+                    key={item._id + "cartItemDisplay"}
+                    className="flex w-full gap-4"
+                  >
                     <div className="w-16 h-16 min-h-16 min-w-16 bg-red-500 border rounded">
                       <img
-                        src={item?.productId?.image?.[0]}
+                        src={item.productId.image?.[0]}
                         className="object-scale-down w-full h-full"
-                        alt={item?.productId?.name}
+                        alt={item.productId.name}
                       />
                     </div>
                     <div className="w-full max-w-sm text-xs">
                       <p className="text-xs text-ellipsis line-clamp-2">
-                        {item?.productId?.name}
+                        {item.productId.name}
                       </p>
-                      <p className="text-neutral-400">{item?.productId?.unit}</p>
+                      <p className="text-neutral-400">{item.productId.unit}</p>
                       <p className="font-semibold">
                         {DisplayPriceInRupees(
-                          pricewithDiscount(item?.productId?.price, item?.productId?.discount)
+                          pricewithDiscount(
+                            item.productId.price,
+                            item.productId.discount
+                          )
                         )}
                       </p>
                     </div>
-                    <div>
-                      <AddToCartButton data={item?.productId} />
-                    </div>
+                    <AddToCartButton data={item} />
                   </div>
                 ))}
               </div>
@@ -156,12 +193,13 @@ console.log( totalPrice)
                       {DisplayPriceInRupees(notDiscountTotalPrice)}
                     </span>
                     <span>{DisplayPriceInRupees(totalPrice)}</span>
-                
                   </p>
                 </div>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Quantity total</p>
-                  <p>{totalQty} item</p>
+                  <p>
+                    {totalQty} item{totalQty !== 1 ? "s" : ""}
+                  </p>
                 </div>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Delivery Charge</p>
@@ -170,7 +208,6 @@ console.log( totalPrice)
                 <div className="font-semibold flex items-center justify-between gap-4">
                   <p>Grand total</p>
                   <p>{DisplayPriceInRupees(totalPrice)}</p>
-                 
                 </div>
               </div>
             </>
@@ -196,21 +233,21 @@ console.log( totalPrice)
           <div className="p-2">
             <div className="bg-green-700 text-neutral-100 px-4 font-bold text-base py-4 static bottom-3 rounded flex items-center gap-4 justify-between">
               <div>{DisplayPriceInRupees(totalPrice)}</div>
-              {/* <button onClick={redirectToCheckoutPage} className="flex items-center gap-1"> */}
-              <button onClick={() =>setIsModalOpen(true)} className="flex items-center gap-1">
+              <button
+                onClick={handleOpenModal}
+                className="flex items-center gap-1"
+              >
                 Proceed
-                <span>
-                  <ChevronRight />
-                </span>
+                <ChevronRight />
               </button>
             </div>
           </div>
         )}
         <CustomerDetailsModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onSubmit={handleFormSubmit}
-      />
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleFormSubmit}
+        />
       </div>
     </section>
   );
