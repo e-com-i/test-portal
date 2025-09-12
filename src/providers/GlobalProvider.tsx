@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
@@ -52,12 +53,12 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
 
   const fetchCartItem = async () => {
     try {
-      const response = await Axios({ ...SummaryApi.getCartItem });
-      const { data: responseData } = response;
+      // const response = await Axios({ ...SummaryApi.getCartItem });
+      // const { data: responseData } = response;
 
-      if (responseData.success) {
-        dispatch(handleAddItemCart(responseData.data));
-      }
+      // if (responseData.success) {
+      //   dispatch(handleAddItemCart(responseData.data));
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -65,16 +66,16 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
 
   const updateCartItem = async (id: string, qty: number) => {
     try {
-      const response = await Axios({
-        ...SummaryApi.updateCartItemQty,
-        data: { _id: id, qty },
-      });
-      const { data: responseData } = response;
+      // const response = await Axios({
+      //   ...SummaryApi.updateCartItemQty,
+      //   data: { _id: id, qty },
+      // });
+      // const { data: responseData } = response;
 
-      if (responseData.success) {
-        await fetchCartItem();
-        return responseData;
-      }
+      // if (responseData.success) {
+      //   await fetchCartItem();
+      //   return responseData;
+      // }
     } catch (error) {
       AxiosToastError(error);
       return error;
@@ -83,22 +84,23 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
 
   const deleteCartItem = async (cartId: string) => {
     try {
-      const response = await Axios({
-        ...SummaryApi.deleteCartItem,
-        data: { _id: cartId },
-      });
-      const { data: responseData } = response;
+      // const response = await Axios({
+      //   ...SummaryApi.deleteCartItem,
+      //   data: { _id: cartId },
+      // });
+      // const { data: responseData } = response;
 
-      if (responseData.success) {
-        toast.success(responseData.message);
-        await fetchCartItem();
-      }
+      // if (responseData.success) {
+      //   toast.success(responseData.message);
+      //   await fetchCartItem();
+      // }
     } catch (error) {
       AxiosToastError(error);
     }
   };
 
   useEffect(() => {
+
     const qty = cartItem.reduce((prev, curr) => prev + curr.quantity, 0);
     setTotalQty(qty);
 
@@ -121,11 +123,11 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
 
   const fetchAddress = async () => {
     try {
-      const response = await Axios({ ...SummaryApi.getAddress });
-      const { data: responseData } = response;
-      if (responseData.success) {
-        dispatch(handleAddAddress(responseData.data));
-      }
+      // const response = await Axios({ ...SummaryApi.getAddress });
+      // const { data: responseData } = response;
+      // if (responseData.success) {
+      //   dispatch(handleAddAddress(responseData.data));
+      // }
     } catch (error) {
       // AxiosToastError(error);
     }
@@ -133,11 +135,11 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
 
   const fetchOrder = async () => {
     try {
-      const response = await Axios({ ...SummaryApi.getOrderItems });
-      const { data: responseData } = response;
-      if (responseData.success) {
-        dispatch(setOrder(responseData.data));
-      }
+      // const response = await Axios({ ...SummaryApi.getOrderItems });
+      // const { data: responseData } = response;
+      // if (responseData.success) {
+      //   dispatch(setOrder(responseData.data));
+      // }
     } catch (error) {
       console.log(error);
     }

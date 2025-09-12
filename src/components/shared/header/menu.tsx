@@ -17,20 +17,18 @@ import { useAppSelector } from "@/store";
 import { useState } from "react";
 import { useGlobalContext } from "@/providers/GlobalProvider";
 import DisplayCartItem from "@/components/shared/DisplayCartItem";
+import { pricewithDiscount } from "@/utils/PriceWithDiscount";
 
 const Menu = () => {
   const user = useAppSelector((state) => state?.user);
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const cartItem = useAppSelector((state) => state.cartItem.cart);
 
-  console.log(cartItem)
-  // const [totalPrice,setTotalPrice] = useState(0)
-  // const [totalQty,setTotalQty] = useState(0)
 
   const result = cartItem.reduce(
   (acc, item) => {
     acc.totalQuantity += item.quantity;
-    acc.totalPrice += item.quantity * item.productId.price;
+    acc.totalPrice += item.quantity * pricewithDiscount(item.productId.price, item?.productId.discount);
     return acc;
   },
   { totalQuantity: 0, totalPrice: 0 }

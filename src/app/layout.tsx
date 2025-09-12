@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 import ReduxProvider from "@/providers/ReduxProvider";
 import Initializer from "./Initializer";
+import GlobalProvider from "@/providers/GlobalProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,18 +26,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <ReduxProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Initializer />
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </ReduxProvider>
+       
+          <ReduxProvider>
+             <GlobalProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Initializer />
+              {children}
+              <Toaster />
+            </ThemeProvider>  </GlobalProvider>
+          </ReduxProvider>{" "}
+      
       </body>
     </html>
   );

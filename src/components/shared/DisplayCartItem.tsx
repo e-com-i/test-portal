@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { CircleX, ChevronRight } from "lucide-react";
 import AddToCartButton from "./AddToCartButton";
 import imageEmpty from "@/assets/images/empty_cart.webp";
@@ -14,7 +14,11 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import CustomerDetailsModal from "../CustomerDetailsModal";
 
-const DisplayCartItem = ({ close }) => {
+interface DisplayCartItem {
+  close: boolean
+}
+
+const DisplayCartItem:FunctionComponent<DisplayCartItem> = ({ close }) => {
   const router = useRouter();
   const { notDiscountTotalPrice, totalPrice, totalQty } = useGlobalContext();
   const cartItem = useAppSelector((state) => state.cartItem.cart);
@@ -27,9 +31,6 @@ const DisplayCartItem = ({ close }) => {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleFormSubmit = (values: FormValues) => {
-    console.log("Customer Data Submitted:", values);
-
-
 
   const doc = new jsPDF();
 
@@ -95,19 +96,7 @@ const DisplayCartItem = ({ close }) => {
   // };
 
 
-
-
-
-  console.log(cartItem)
-
-    const result = cartItem.reduce(
-  (acc, item) => {
-    acc.totalQuantity += item.quantity;
-    acc.totalPrice += item.quantity * item.productId.price;
-    return acc;
-  },
-  { totalQuantity: 0, totalPrice: 0 }
-);
+console.log( totalPrice)
 
   return (
     <section className="bg-neutral/90 fixed top-0 bottom-0 right-0 left-0 inset-0 bg-black/50 z-50">
@@ -163,17 +152,16 @@ const DisplayCartItem = ({ close }) => {
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Items total</p>
                   <p className="flex items-center gap-2">
-                    {/* <span className="line-through text-neutral-400">
+                    <span className="line-through text-neutral-400">
                       {DisplayPriceInRupees(notDiscountTotalPrice)}
-                    </span> */}
-                    {/* <span>{DisplayPriceInRupees(totalPrice)}</span> */}
-                    <span>{DisplayPriceInRupees(result?.totalPrice)}</span>
+                    </span>
+                    <span>{DisplayPriceInRupees(totalPrice)}</span>
+                
                   </p>
                 </div>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Quantity total</p>
-                  {/* <p>{totalQty} item</p> */}
-                  <p>{result?.totalQuantity} item</p>
+                  <p>{totalQty} item</p>
                 </div>
                 <div className="flex gap-4 justify-between ml-1">
                   <p>Delivery Charge</p>
@@ -181,8 +169,8 @@ const DisplayCartItem = ({ close }) => {
                 </div>
                 <div className="font-semibold flex items-center justify-between gap-4">
                   <p>Grand total</p>
-                  {/* <p>{DisplayPriceInRupees(totalPrice)}</p> */}
-                  <p>{DisplayPriceInRupees(result?.totalPrice)}</p>
+                  <p>{DisplayPriceInRupees(totalPrice)}</p>
+                 
                 </div>
               </div>
             </>
@@ -207,8 +195,7 @@ const DisplayCartItem = ({ close }) => {
         {cartItem.length > 0 && (
           <div className="p-2">
             <div className="bg-green-700 text-neutral-100 px-4 font-bold text-base py-4 static bottom-3 rounded flex items-center gap-4 justify-between">
-              {/* <div>{DisplayPriceInRupees(totalPrice)}</div> */}
-              <div>{DisplayPriceInRupees(result?.totalPrice)}</div>
+              <div>{DisplayPriceInRupees(totalPrice)}</div>
               {/* <button onClick={redirectToCheckoutPage} className="flex items-center gap-1"> */}
               <button onClick={() =>setIsModalOpen(true)} className="flex items-center gap-1">
                 Proceed

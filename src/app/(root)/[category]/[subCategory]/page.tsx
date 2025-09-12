@@ -1,105 +1,81 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import Loading from "@/components/shared/Loading";
 import { valideURLConvert } from "@/utils/valideURLConvert";
-import SummaryApi from "@/common/SummaryApi";
-import Axios from "@/utils/Axios";
-import AxiosToastError from "@/utils/AxiosToastError";
+import { RootState } from "@/store";
 import CardProduct from "@/components/shared/productNew/CardProduct";
 import { useParams } from "next/navigation";
-import { RootState } from "@/store";
-import dummyData from "./dummyData.json";
-import { subCategoryData } from "../../product";
 import { fetchProductsBySubCategory, fetchSubCategories } from "@/lib/api";
+import AxiosToastError from "@/utils/AxiosToastError";
 
 const ProductListPage: React.FC = () => {
   const [data, setData] = useState<Product[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [totalPage, setTotalPage] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
+  const [displaySubCategory, setDisplaySubCategory] = useState<SubCategory[]>([]);
   const params = useParams() as { category: string; subCategory: string };
 
   const AllSubCategory = useSelector(
     (state: RootState) => state.product.allSubCategory
   ) as SubCategory[];
 
-  const [displaySubCatory, setDisplaySubCategory] = useState<SubCategory[]>([]);
-
-  const category = params?.category?.split("-");
-  const subCategory = params?.subCategory?.split("-");
-  const subCategoryName = subCategory
-    ?.slice(0, subCategory.length - 1)
-    ?.join(" ");
-  const categoryName = category?.slice(0, category.length - 1)?.join(" ");
-
   const categoryId = params.category.split("-").slice(-1)[0];
   const subCategoryId = params.subCategory.split("-").slice(-1)[0];
+  const categoryName = params.category.split("-").slice(0, -1).join(" ");
+  const subCategoryName = params.subCategory.split("-").slice(0, -1).join(" ");
 
-  //   setData(dummyData.products);
-  // setDisplaySubCategory(dummyData.subCategories);
-
-  const fetchProductdata = async () => {
+  const fetchSubCategoriesData = useCallback(async () => {
     try {
+      console.log("asffds")
       setLoading(true);
       // const responseData = await fetchSubCategories(categoryId);
-      // const response = await Axios({
-      //   ...SummaryApi.getProductByCategoryAndSubCategory,
-      //   data: {
-      //     categoryId,
-      //     subCategoryId,
-      //     page,
-      //     limit: 8,
-      //   },
-      // });
       const responseData = await fetchSubCategories(categoryId);
-
-      const products = await fetchProductsBySubCategory(categoryId, subCategoryId);
-      // const { data: responseData } = response;
-
-      // if (responseData.success) {
-      //   if (responseData.page === 1) {
-      //     setData(responseData.data);
-
-      //   } else {
-      //     setData((prev) => [...prev, ...responseData.data]);
-      //   }
-      //   setTotalPage(responseData.totalCount);
-      // }
-      setDisplaySubCategory(responseData?.subcategories);
-      setData(products?.products);
-      setTotalPage(dummyData.totalCount);
+      setDisplaySubCategory(responseData?.subcategories || []);
     } catch (error) {
       AxiosToastError(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [categoryId]);
+
+  const fetchProductsData = useCallback(async () => {
+    if (!subCategoryId || !categoryId) return;
+    try {
+      setLoading(true);
+      const productsResponse = await fetchProductsBySubCategory(categoryId, subCategoryId);
+      setData(productsResponse?.products || []);
+    } catch (error) {
+      AxiosToastError(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [categoryId, subCategoryId]);
 
   useEffect(() => {
-    fetchProductdata();
-  }, [params]);
+    fetchSubCategoriesData();
+  }, [fetchSubCategoriesData]);
 
   useEffect(() => {
-    // const sub = subCategoryData?.data.filter((s) =>
-    //   s.category.some((el) => el._id === categoryId)
-    // );
-    // setDisplaySubCategory(sub);
-  }, [params, AllSubCategory]);
+    fetchProductsData();
+  }, [fetchProductsData]);
+
+  // Commented code preserved
+  // useEffect(() => {
+  //   const sub = subCategoryData?.data.filter((s) =>
+  //     s.category.some((el) => el._id === categoryId)
+  //   );
+  //   setDisplaySubCategory(sub);
+  // }, [params, AllSubCategory]);
 
   return (
-    <section className=" bg-gray-50 min-h-screen">
-      {/* <section className="pt-24 lg:pt-20 bg-gray-50 min-h-screen"> */}
-      {/* <div className="container mx-auto grid grid-cols-[90px,1fr] md:grid-cols-[200px,1fr] lg:grid-cols-[280px,1fr]"> */}
+    <section className="bg-gray-50 min-h-screen">
       <div className="container mx-auto flex">
-        {/* Sub Categories */}
-        <aside className="h-[calc(100vh-6rem)] overflow-y-auto bg-white shadow-md  scrollbarCustom">
-          {displaySubCatory.map((s) => {
+        <aside className="h-[calc(100vh-6rem)] overflow-y-auto bg-white shadow-md scrollbarCustom">
+          {displaySubCategory.map((s) => {
             const link = `/${valideURLConvert(
               categoryName
             )}-${categoryId}/${valideURLConvert(s.name)}-${s.id}`;
-            // const link = `/${valideURLConvert(s.category[0]?.name)}-${s.category[0]?._id}/${valideURLConvert(s.name)}-${s._id}`;
             return (
               <Link
                 key={s.id}
@@ -123,8 +99,7 @@ const ProductListPage: React.FC = () => {
           })}
         </aside>
 
-        {/* Products */}
-        <main className="flex flex-col">
+        <main className="flex flex-col flex-1">
           <div className="bg-white shadow-md p-4 sticky top-0 z-10">
             <h3 className="font-semibold">{subCategoryName}</h3>
           </div>
