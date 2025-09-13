@@ -22,6 +22,7 @@ const DisplayCartItem: FunctionComponent<DisplayCartItem> = ({ close }) => {
   const { notDiscountTotalPrice, totalPrice, totalQty } = useGlobalContext();
   const cartItem = useAppSelector((state) => state.cartItem.cart);
   const user = useAppSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
 
   // Use NEXT_PUBLIC_ prefix for env variables accessible in the browser
   const ACCESS_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY;
@@ -38,7 +39,7 @@ const DisplayCartItem: FunctionComponent<DisplayCartItem> = ({ close }) => {
       toast.error("Configuration error, try again later.");
       return;
     }
-
+setLoading(true);
     const submitData = new FormData();
     submitData.append("access_key", ACCESS_KEY);
     submitData.append("fullName", values.fullName);
@@ -131,7 +132,9 @@ Please process this order and contact the customer for payment confirmation.
       setStatus("error");
       toast.error("Network error");
       console.error("Network error:", error);
-    }
+    }finally {
+    setLoading(false); // end loading
+  }
   };
 
   return (
@@ -241,6 +244,7 @@ Please process this order and contact the customer for payment confirmation.
               <button
                 onClick={handleOpenModal}
                 className="flex items-center gap-1"
+                disabled={loading}
               >
                 Proceed
                 <ChevronRight />

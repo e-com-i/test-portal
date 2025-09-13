@@ -36,7 +36,7 @@ const Footer = () => {
         </div>
 
         {/* Quick Links */}
-        <div>
+        {/* <div>
           <h3 className="text-lg font-bold">Quick Links</h3>
           <ul className="mt-2 space-y-2">
             <li>
@@ -60,7 +60,7 @@ const Footer = () => {
               </Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* Additional Information */}
         <div>

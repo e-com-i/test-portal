@@ -1,3 +1,4 @@
+import { address, companyInfo, ProprietorInfo } from "@/lib/constants";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -36,13 +37,14 @@ export const generateInvoicePdf = (cartItem: CartItem[], data: OrderData) => {
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(18);
   doc.setFont("helvetica", "bold");
-  doc.text("Your Store Name", 14, 12);
+  doc.text(companyInfo?.companyName, 14, 12);
+
   
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.text("Your Store Address Line 1", 14, 18);
-  doc.text("Your Store Address Line 2", 14, 22);
-
+  doc.text(address?.firstLine, 14, 18);
+  doc.text(address?.secondLine, 14, 22);
+doc.text(`GST No: ${companyInfo?.gstNumber || "N/A"}`, 14, 26); // add gst 
   // Invoice Title (Right side)
   doc.setFontSize(24);
   doc.setFont("helvetica", "bold");
@@ -57,8 +59,9 @@ export const generateInvoicePdf = (cartItem: CartItem[], data: OrderData) => {
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Phone: +1234567890", 14, 35);
-  doc.text("Email: store@example.com", 14, 41);
+  doc.text(`Name: ${ProprietorInfo?.name}`, 14, 35);
+  doc.text(`Phone: ${ProprietorInfo?.contact}`, 14, 35);
+  // doc.text("Email: store@example.com", 14, 41);
 
   // Invoice number, date and status (Right aligned)
   doc.text(`Invoice #: ${invoiceNumber}`, 210 - 14, 35, { align: "right" });
