@@ -94,7 +94,7 @@ const Footer = () => {
           <h2 className="mt-2 text-lg font-bold">Contact Us</h2>
           <p className="">{ProprietorInfo.name}</p>
           <p className="">{ProprietorInfo.contact}</p>
-            <p>11-sept</p>
+            {/* <p>11-sept</p> */}
         </div>
       </div>
     </footer>
