@@ -109,25 +109,26 @@ Please process this order and contact the customer for payment confirmation.
         method: "POST",
         body: submitData,
       });
-
       const result = await response.json();
+
       if (result.success) {
-        setStatus("success");
-        toast.success("Form submitted successfully");
+      setStatus("success");
+      toast.success("Form submitted successfully");
+close()
+      const dataParam = encodeURIComponent(JSON.stringify(result.data));
+      const cartParam = encodeURIComponent(JSON.stringify(cartItem));
+      const totalPriceParam = encodeURIComponent(totalPrice.toString());
+      const totalQtyParam = encodeURIComponent(totalQty.toString());
 
-        const dataParam = encodeURIComponent(JSON.stringify(result.data));
-        const cartParam = encodeURIComponent(JSON.stringify(cartItem));
-        const totalPriceParam = encodeURIComponent(totalPrice.toString());
-        const totalQtyParam = encodeURIComponent(totalQty.toString());
+      const targetUrl = `/success?data=${dataParam}&cd=${cartParam}&tp=${totalPriceParam}&tq=${totalQtyParam}`;
 
-        router.push(
-          `/success?data=${dataParam}&cd=${cartParam}&tp=${totalPriceParam}&tq=${totalQtyParam}`
-        );
-      } else {
-        setStatus("error");
-        toast.error("Form submission error");
-        console.error("Form submission error:", result);
-      }
+
+      router.push(targetUrl);
+    } else {
+      setStatus("error");
+      toast.error("Form submission error");
+      console.error("Form submission error:", result);
+    }
     } catch (error) {
       setStatus("error");
       toast.error("Network error");
