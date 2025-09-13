@@ -2,7 +2,6 @@
 
 import CategoryCard from "@/components/shared/product/category-card";
 import CategoryWiseProductDisplay from "@/components/shared/CategoryWiseProductDisplay";
-import { sampleCategories } from "@/dummyData/CategoryCard";
 import { valideURLConvert } from "@/utils/valideURLConvert";
 import { useAppSelector } from "@/store";
 import { useRouter } from "next/navigation"; // ✅ for client-side navigation
@@ -17,14 +16,7 @@ const Homepage = () => {
   const categoryData = useAppSelector((state) => state.product.allCategory);
   // const subCategoryData = useAppSelector((state) => state.product.allSubCategory);
 
-  const banner =
-    "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=2700/layout-engine/2022-05/Group-33704.jpg";
-  const bannerMobile =
-    "https://cdn.pixabay.com/photo/2024/11/17/04/52/chilli-9202873_1280.jpg";
-
-
-  const handleRedirectProductListpage = async(id: string, name: string) => {
-
+  const handleRedirectProductListpage = async (id: string, name: string) => {
     // const subcategory = subCategoryData?.data.find((sub) =>
     //   sub.category.some((c) => c._id === id)
     // );
@@ -36,15 +28,14 @@ const Homepage = () => {
     // )}-${subcategory._id}`;
     const responseData = await fetchSubCategories(id);
 
-    const url = `/${valideURLConvert(name)}-${id}/${valideURLConvert(
-      responseData?.parent?.name)}-${responseData?.subcategories[0]?.id}`;
-    
+    const url = `/${id}/${responseData?.subcategories[0]?.id}`;
+
     router.push(url); // ✅ correct navigation
   };
 
   return (
     <>
-      <div className="container mx-auto">
+      {/* <div className="container mx-auto">
         <div
           className={`w-full h-full min-h-48 bg-blue-100 rounded ${
             !banner && "animate-pulse my-2"
@@ -61,7 +52,7 @@ const Homepage = () => {
             alt="banner"
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="container mx-auto px-4 my-2 grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10 gap-2">
         {loadingCategory
@@ -74,7 +65,8 @@ const Homepage = () => {
                 <div className="bg-blue-100 h-8 rounded" />
               </div>
             ))
-          : categoryData && categoryData?.map((cat) => (
+          : categoryData &&
+            categoryData?.map((cat) => (
               <div
                 key={cat.id}
                 className="w-full h-full cursor-pointer"
@@ -92,7 +84,7 @@ const Homepage = () => {
       </div>
 
       {/* <div className="container mx-auto px-4 my-4 flex gap-4"></div> */}
-{/***display category product */}
+      {/***display category product */}
       {/* {
         categoryData?.data?.map((category,index)=>{
           return(

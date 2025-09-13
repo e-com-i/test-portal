@@ -4,7 +4,7 @@ import { DisplayPriceInRupees } from "@/utils/DisplayPriceInRupees";
 import { pricewithDiscount } from "@/utils/PriceWithDiscount";
 import { valideURLConvert } from "@/utils/valideURLConvert";
 import Link from "next/link";
-import AddToCartButton from "../AddToCartButton";
+import AddToCartButton from "../cart/AddToCartButton";
 
 interface ProductType {
   _id: string;

@@ -24,13 +24,13 @@ const Header = () => {
                 width={70}
                 priority={true}
               />
-              <span className="hidden lg:block font-bold text-2xl ml-3">
+              <span className="font-bold text-2xl ml-3">
                 {APP_NAME}
               </span>
             </Link>
           </div>
           <div className="hidden md:block">
-            <SearchProducts />
+            {/* <SearchProducts /> */}
           </div>
           <Menu />
         </div>
