@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { pricewithDiscount } from "@/utils/PriceWithDiscount";
 import { DisplayPriceInRupees } from "@/utils/DisplayPriceInRupees";
 import { ChevronLeft, ChevronRight, DivideCircle } from "lucide-react";
-import AddToCartButton from "@/components/shared/AddToCartButton";
+import AddToCartButton from "@/components/shared/cart/AddToCartButton";
 
 const ProductDisplayPage = () => {
   // Initialize state by reading from localStorage once

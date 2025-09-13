@@ -1,7 +1,6 @@
 "use client";
 import React, { FunctionComponent, useState } from "react";
 import { CircleX, ChevronRight } from "lucide-react";
-import AddToCartButton from "./AddToCartButton";
 import imageEmpty from "@/assets/images/empty_cart.webp";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -12,6 +11,7 @@ import { pricewithDiscount } from "@/utils/PriceWithDiscount";
 import { useGlobalContext } from "@/providers/GlobalProvider";
 import { generateInvoicePdf } from "@/utils/generateInvoicePdf";
 import CustomerDetailsModal from "../CustomerDetailsModal";
+import AddToCartButton from "./cart/AddToCartButton";
 
 interface DisplayCartItem {
   close: () => void;
@@ -22,6 +22,7 @@ const DisplayCartItem: FunctionComponent<DisplayCartItem> = ({ close }) => {
   const { notDiscountTotalPrice, totalPrice, totalQty } = useGlobalContext();
   const cartItem = useAppSelector((state) => state.cartItem.cart);
   const user = useAppSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
 
   // Use NEXT_PUBLIC_ prefix for env variables accessible in the browser
   const ACCESS_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY;
@@ -38,7 +39,7 @@ const DisplayCartItem: FunctionComponent<DisplayCartItem> = ({ close }) => {
       toast.error("Configuration error, try again later.");
       return;
     }
-
+setLoading(true);
     const submitData = new FormData();
     submitData.append("access_key", ACCESS_KEY);
     submitData.append("fullName", values.fullName);
@@ -110,13 +111,18 @@ Please process this order and contact the customer for payment confirmation.
       });
 
       const result = await response.json();
-
-      console.log(response);
       if (result.success) {
         setStatus("success");
-        generateInvoicePdf(cartItem, result.data);
         toast.success("Form submitted successfully");
-        setTimeout(() => setStatus(""), 5000);
+
+        const dataParam = encodeURIComponent(JSON.stringify(result.data));
+        const cartParam = encodeURIComponent(JSON.stringify(cartItem));
+        const totalPriceParam = encodeURIComponent(totalPrice.toString());
+        const totalQtyParam = encodeURIComponent(totalQty.toString());
+
+        router.push(
+          `/success?data=${dataParam}&cd=${cartParam}&tp=${totalPriceParam}&tq=${totalQtyParam}`
+        );
       } else {
         setStatus("error");
         toast.error("Form submission error");
@@ -126,7 +132,9 @@ Please process this order and contact the customer for payment confirmation.
       setStatus("error");
       toast.error("Network error");
       console.error("Network error:", error);
-    }
+    }finally {
+    setLoading(false); // end loading
+  }
   };
 
   return (
@@ -236,6 +244,7 @@ Please process this order and contact the customer for payment confirmation.
               <button
                 onClick={handleOpenModal}
                 className="flex items-center gap-1"
+                disabled={loading}
               >
                 Proceed
                 <ChevronRight />

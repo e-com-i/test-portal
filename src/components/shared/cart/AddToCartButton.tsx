@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import Loading from "./Loading";
 import { Minus, Plus } from "lucide-react";
 import { useGlobalContext } from "@/providers/GlobalProvider";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -10,7 +9,8 @@ import Axios from "@/utils/Axios";
 import SummaryApi from "@/common/SummaryApi";
 import AxiosToastError from "@/utils/AxiosToastError";
 import { handleAddItemCart } from "@/store/slice/cartProduct";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+import Loading from "../Loading";
 
 interface ProductData {
   _id: string;

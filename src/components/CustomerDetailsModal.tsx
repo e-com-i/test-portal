@@ -1,4 +1,3 @@
-// components/CustomerDetailsModal.tsx
 "use client";
 
 import React from "react";
@@ -48,11 +47,11 @@ const CustomerDetailsModal: React.FC<Props> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 flex justify-center items-center z-50"
+      className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg"
+        className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-auto shadow-lg border border-gray-300"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-semibold mb-4">Customer Details</h2>
@@ -92,7 +91,6 @@ const CustomerDetailsModal: React.FC<Props> = ({
                   Email
                 </label>
                 <Field id="email" name="email" type="email" as={Input} />
-        
                 <ErrorMessage
                   name="email"
                   component="div"
@@ -101,19 +99,22 @@ const CustomerDetailsModal: React.FC<Props> = ({
               </div>
 
               {/* Country Code and Phone Number - inline */}
-              <div className="flex space-x-3">
-                <div className="flex-1">
-                  <label
-                    htmlFor="countryCode"
+              <label
+                    htmlFor="phone"
                     className="block mb-1 font-medium text-gray-700"
                   >
-                    Country Code
+                    Phone Number
                   </label>
-
-                 
-                    <Field label="Country Code"
+              <div className="flex space-x-3">
+                
+                <div className="flex-1">
+                  
+                  <Field
+                    label="Country Code"
                     name="countryCode"
-                    options={countryCodeOptions} as={Select} />
+                    options={countryCodeOptions}
+                    as={Select}
+                  />
                   <ErrorMessage
                     name="countryCode"
                     component="div"
@@ -122,14 +123,8 @@ const CustomerDetailsModal: React.FC<Props> = ({
                 </div>
 
                 <div className="flex-2">
-                  <label
-                    htmlFor="phone"
-                    className="block mb-1 font-medium text-gray-700"
-                  >
-                    Phone Number
-                  </label>
-                   <Field id="phone" name="phone" as={Input} />
-                 
+                  
+                  <Field id="phone" name="phone" as={Input} />
                   <ErrorMessage
                     name="phone"
                     component="div"
@@ -146,7 +141,7 @@ const CustomerDetailsModal: React.FC<Props> = ({
                 >
                   Address (Optional)
                 </label>
-                 <Field id="address" name="address" rows={3} as={Textarea} />
+                <Field id="address" name="address" rows={3} as={Textarea} />
                 <ErrorMessage
                   name="address"
                   component="div"
@@ -167,7 +162,7 @@ const CustomerDetailsModal: React.FC<Props> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-green-700 text-neutral-100 px-4 font-bold text-base py-4 static bottom-3 rounded flex items-center gap-4 justify-between disabled:opacity-50"
+                  className="bg-green-700 text-neutral-100 px-4 font-bold text-base py-4 rounded flex items-center gap-4 justify-between disabled:opacity-50"
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
