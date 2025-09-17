@@ -54,7 +54,7 @@ const Homepage = () => {
         </div>
       </div> */}
 
-      <div className="container mx-auto px-4 my-2 grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10 gap-2">
+      <div className="container mx-auto md:px-4 my-2 grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10 md:gap-2">
         {loadingCategory
           ? new Array(12).fill(null).map((_, index) => (
               <div
