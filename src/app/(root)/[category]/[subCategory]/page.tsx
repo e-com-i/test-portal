@@ -112,7 +112,7 @@ const ProductListPage: React.FC = () => {
             </aside>
 
             <div className="flex-1 max-h-screen overflow-y-auto">
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 p-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 p-2 md:p-4 gap-2 md:gap-4">
                 {loadingProducts
                   ? Array.from({ length: 10 }).map((_, index) => (
                       <CardLoading key={index} />
