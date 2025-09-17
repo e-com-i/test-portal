@@ -151,36 +151,40 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ data }) => {
   };
 
   return (
-    <div className="w-full max-w-[150px]">
-      {isAvailableCart ? (
-        <div className="flex bg-green-600 w-full text-white rounded">
-          <Button
-            onClick={decreaseQty}
-            className="bg-green-600 hover:bg-green-700 flex-1 w-full p-1 rounded flex items-center justify-center"
-          >
-            <Minus />
-          </Button>
+  <div className="w-full max-w-[80px]">
+  {isAvailableCart ? (
+    <div className="flex bg-green-600 w-full text-white rounded-md overflow-hidden">
+      <Button
+        onClick={decreaseQty}
+        className="bg-green-600 hover:bg-green-700 flex-[1] rounded-none flex items-center justify-center min-h-[20px]"
+      >
+        <Minus className="w-2 h-2" />
+      </Button>
 
-          <p className="flex-1 w-full font-semibold px-1 flex items-center justify-center">
-            {qty}
-          </p>
+      <p className="flex-[1] font-semibold text-base flex items-center justify-center min-h-[28px]">
+        {qty}
+      </p>
 
-          <Button
-            onClick={increaseQty}
-            className="bg-green-600 hover:bg-green-700 flex-1 w-full p-1 rounded flex items-center justify-center"
-          >
-            <Plus />
-          </Button>
-        </div>
-      ) : (
-        <Button
-          onClick={handleADDTocart}
-          className="bg-green-100 border border-green-700 text-green-700 px-2 lg:px-4 py-1 rounded-full text-sm font-medium"
-        >
-          {loading ? <Loading /> : "Add"}
-        </Button>
-      )}
+      <Button
+        onClick={increaseQty}
+        className="bg-green-600 hover:bg-green-700 flex-[1] rounded-none flex items-center justify-center min-h-[20px]"
+      >
+        <Plus className="w-2 h-2" />
+      </Button>
     </div>
+  ) : (
+    <Button
+      onClick={handleADDTocart}
+      className="bg-green-100 border border-green-700 text-green-700 px-3 py-1 rounded-full text-sm font-medium"
+    >
+      {loading ? <Loading /> : "Add"}
+    </Button>
+  )}
+</div>
+
+
+
+
   );
 };
 

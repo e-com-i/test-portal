@@ -47,11 +47,11 @@ const CardProduct: React.FC<CardProductProps> = ({ data }) => {
         )}
       </div>
 
-      <div className="flex items-center gap-1">
+      {/* <div className="flex items-center gap-1">
         <div className="rounded text-xs w-fit p-[1px] px-2 text-green-600 bg-green-50">
           10 min
         </div>
-      </div>
+      </div> */}
 
       <div className="px-2 lg:px-0 font-medium text-ellipsis text-sm lg:text-base line-clamp-2">
         {data.name}
@@ -75,7 +75,7 @@ const CardProduct: React.FC<CardProductProps> = ({ data }) => {
 
         <div>
           {data.stock === 0 ? (
-            <p className="text-red-500 text-sm text-center">Out of stock</p>
+            <p className="text-red-500 text-xs text-center">Out of stock</p>
           ) : (
             <AddToCartButton data={data} />
           )}
