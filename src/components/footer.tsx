@@ -125,8 +125,8 @@ const Footer = () => {
     </div>
 
     {/* Center download app - MAKE FLEX ON MOBILE */}
-    <div className="flex flex-row items-center gap-4">
-      <div className="max-w-7xl mx-auto px-6 py-2 text-xs text-gray-500 leading-relaxed">
+    <div className="flex flex-row gap-4">
+      <div className="max-w-7xl mx-auto px-6 text-xs text-gray-500 leading-relaxed">
         <h3 className="text-lg font-bold text-black">Address</h3>
      {address.firstLine} {address.secondLine}
       </div>
