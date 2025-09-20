@@ -70,7 +70,7 @@ const ProductListPage: React.FC = () => {
             </h3>
           </div>
           <div className="flex">
-            <aside className="max-h-screen overflow-y-auto bg-white shadow-md scrollbarCustom w-20 lg:w-24">
+            <aside className="max-h-screen overflow-y-auto bg-white shadow-md scrollbarCustom w-18 lg:w-24">
               {loadingSubCategories ? (
                 <div className="flex flex-col items-center gap-4 p-2">
                   {Array.from({ length: 4 }).map((_, i) => (
@@ -95,7 +95,7 @@ const ProductListPage: React.FC = () => {
                           : ""
                       }`}
                     >
-                      <div className="w-fit max-w-28 mx-auto lg:mx-0">
+                      <div className="w-fit max-w-20 md:max-w-28 mx-auto lg:mx-0">
                         <img
                           src={s.image}
                           alt={s.name}

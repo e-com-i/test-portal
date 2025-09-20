@@ -10,6 +10,10 @@ export const companyInfo = {
   gstNumber: "19AWEPG4305N2ZD",
 };
 
+export const logosPath ={
+  companyLogo: "/images/KB_Masala_logo.jpeg"
+}
+
 export const address = {
   firstLine: "Gate No,1 Jalan Complex, Ground Panchayat, Jangalpur",
   secondLine: "Howrah - 711411, West Bengal, India",

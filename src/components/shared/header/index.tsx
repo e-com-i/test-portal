@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { APP_NAME } from "@/lib/constants";
+import { APP_NAME, companyInfo, logosPath } from "@/lib/constants";
 import Menu from "./menu";
 import SearchProducts from "./search-products";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,24 +10,25 @@ const Header = () => {
   return (
     <Card
       className="w-full"
-      style={{ height: "160px" }}
+      style={{ height: "100px" }}
       suppressHydrationWarning
     >
       <CardContent className="p-2.5 pt-0">
         <div className="wrapper flex-between" style={{ paddingLeft: "15px" }}>
-          <div className="flex-start">
+          <div className="flex-start flex-col">
             <Link href="/" className="flex-start ml-4">
               <Image unoptimized={true}
-                src="/images/kbMasaleLogo.jpg"
+                src={logosPath?.companyLogo}
                 alt={`${APP_NAME} logo`}
-                height={60}
-                width={70}
+                height={70}
+                width={80}
                 priority={true}
               />
               <span className="font-bold text-2xl ml-3">
                 {APP_NAME}
               </span>
             </Link>
+            <p className="text-gray-600 mt-2 ml-4 mb-4"><span className="font-semibold">GST NO:</span> {companyInfo.gstNumber}</p>
           </div>
           <div className="hidden md:block">
             {/* <SearchProducts /> */}
