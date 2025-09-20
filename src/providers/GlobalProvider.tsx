@@ -117,7 +117,7 @@ const GlobalProvider: React.FC<Props> = ({ children }) => {
   }, [cartItem]);
 
   const handleLogoutOut = () => {
-    localStorage.clear();
+    // localStorage.clear();
     dispatch(handleAddItemCart([]));
   };
 

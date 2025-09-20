@@ -6,17 +6,20 @@ import { ChevronLeft, ChevronRight, DivideCircle } from "lucide-react";
 import AddToCartButton from "@/components/shared/cart/AddToCartButton";
 
 const ProductDisplayPage = () => {
+  const storedData = localStorage.getItem("productDetails");
   // Initialize state by reading from localStorage once
+        console.log(storedData)
   const [data, setData] = useState<Product>(() => {
     if (typeof window !== "undefined") {
-      const storedData = localStorage.getItem("productDetails");
+      
+
       return storedData ? JSON.parse(storedData) : null;
     }
     return null;
   });
   const [imageIndex, setImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const totalImages = data.image.length
+  const totalImages = data?.image?.length || 0
 
   useEffect(() => {
     if (data) {
