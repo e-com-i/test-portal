@@ -86,93 +86,75 @@ const Footer = () => {
 
       {/* Bottom footer with copyright, app download, social icons */}
       <div className="bg-gray-50 py-6">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Left copyright */}
-          <div className="text-xs text-gray-500 whitespace-nowrap">
-            <h3 className="text-lg font-bold mb-2 text-black">Contact Us</h3>
-          <p className="text-gray-600 font-semibold">{ProprietorInfo.name} {ProprietorInfo.contact}</p>
+  <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row  justify-between gap-6">
+    {/* Left copyright */}
+    <div className="text-xs text-gray-500 whitespace-nowrap">
+      <h3 className="text-lg font-bold mb-2 text-black">Contact Us</h3>
+      <p className="text-gray-600 font-semibold">{ProprietorInfo.name} {ProprietorInfo.contact}</p>
+      <div className="flex"> 
+        <Link
+        href="https://www.facebook.com/kbmasale/about/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:brightness-90 transition"
+      >
+        <Image
+          unoptimized={true}
+          src="/images/icons/facebook.png"
+          alt="Facebook"
+          width={30}
+          height={30}
+        />
+      </Link>
+     
+      <Link
+        href="https://www.instagram.com/kbmasale/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:brightness-90 transition"
+      >
+        <Image
+          unoptimized={true}
+          src="/images/icons/instagram.png"
+          alt="Instagram"
+          width={30}
+          height={30}
+        />
+      </Link>
+       </div>
+    </div>
 
-          </div>
-
-          {/* Center download app */}
-          <div className="flex items-center gap-4">
-            <Link
-              href="https://www.facebook.com/kbmasale/about/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:brightness-90 transition"
-            >
-              <Image
-                unoptimized={true}
-                src="/images/icons/facebook.png"
-                alt="Facebook"
-                width={30}
-                height={30}
-              />
-            </Link>
-            <Link
-              href="https://www.instagram.com/kbmasale/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:brightness-90 transition"
-            >
-              <Image
-                unoptimized={true}
-                src="/images/icons/instagram.png"
-                alt="Instagram"
-                width={30}
-                height={30}
-              />
-            </Link>
-            {/* <span className="font-semibold text-gray-700">Download App</span>
-            <a href="#" aria-label="Download on the Apple App Store">
-              <Image
-                unoptimized={true}
-                src="/images/appstore.svg"
-                alt="App Store"
-                width={110}
-                height={38}
-                className="object-contain"
-              />
-            </a>
-            <a href="#" aria-label="Get it on Google Play">
-              <Image
-                unoptimized={true}
-                src="/images/googleplay.svg"
-                alt="Google Play"
-                width={130}
-                height={38}
-                className="object-contain"
-              />
-            </a> */}
-          </div>
-
-          {/* Right social icons */}
-          <div className="flex space-x-4 mb-6">
-             <Link
-              href={"https://www.tradeindia.com/truststamp-member/KB-MASALE-64554165/"}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                unoptimized={true}
-                src="https://tiimg.tistatic.com/new_website1/general/trust_stamp/trusted-seller.svg"
-                alt="Verified Seller icon"
-                width={100}
-                height={80}
-                className="rounded"
-              />
-            </Link>
-            
-          </div>
-        </div>
-      </div>
-
-      {/* Disclaimer below */}
+    {/* Center download app - MAKE FLEX ON MOBILE */}
+    <div className="flex flex-row items-center gap-4">
       <div className="max-w-7xl mx-auto px-6 py-2 text-xs text-gray-500 leading-relaxed">
         <h3 className="text-lg font-bold text-black">Address</h3>
      {address.firstLine} {address.secondLine}
       </div>
+    </div>
+
+    {/* Right social icons - MAKE FLEX ON MOBILE */}
+    <div className="flex flex-row space-x-4 mb-6">
+      <Link
+        href={"https://www.tradeindia.com/truststamp-member/KB-MASALE-64554165/"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Image
+          unoptimized={true}
+          src="https://tiimg.tistatic.com/new_website1/general/trust_stamp/trusted-seller.svg"
+          alt="Verified Seller icon"
+          width={100}
+          height={80}
+          className="rounded"
+        />
+      </Link>
+    </div>
+  </div>
+</div>
+
+
+      {/* Disclaimer below */}
+      
     </footer>
   );
 };
