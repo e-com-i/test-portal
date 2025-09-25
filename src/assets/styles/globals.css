@@ -59,7 +59,7 @@
   max-width: theme(maxWidth.7xl);
   margin-left: auto;
   margin-right: auto;
-  padding: theme(spacing.4);
+  padding: theme(spacing.1);
 }
 
 @utility flex-start {

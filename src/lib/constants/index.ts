@@ -11,7 +11,8 @@ export const companyInfo = {
 };
 
 export const logosPath ={
-  companyLogo: "/images/KB_Masala_logo.jpeg"
+  companyLogo: "/images/kbMasaleLogo.jpg",
+  companyLogoName: "/images/KB_Masala_logo.jpeg"
 }
 
 export const address = {
