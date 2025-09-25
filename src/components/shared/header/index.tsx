@@ -10,25 +10,32 @@ const Header = () => {
   return (
     <Card
       className="w-full"
-      style={{ height: "100px" }}
+      style={{ height: "" }}
       suppressHydrationWarning
     >
-      <CardContent className="p-2.5 pt-0">
-        <div className="wrapper flex-between" style={{ paddingLeft: "15px" }}>
+      <CardContent className="p-[1px] pt-0">
+        <div className="wrapper flex-between mb-0 pl-2" >
           <div className="flex-start flex-col">
-            <Link href="/" className="flex-start ml-4">
+            <Link href="/" className="flex-start gap-4">
               <Image unoptimized={true}
                 src={logosPath?.companyLogo}
+                alt={`${APP_NAME} logo`}
+                height={60}
+                width={70}
+                priority={true}
+              />
+              <Image unoptimized={true}
+                src={logosPath?.companyLogoName}
                 alt={`${APP_NAME} logo`}
                 height={70}
                 width={80}
                 priority={true}
               />
-              <span className="font-bold text-2xl ml-3">
+              {/* <span className="font-bold text-2xl ml-3">
                 {APP_NAME}
-              </span>
+              </span> */}
             </Link>
-            <p className="text-gray-600 mt-2 ml-4 mb-4"><span className="font-semibold">GST NO:</span> {companyInfo.gstNumber}</p>
+            <p className="text-gray-600 text-xs mt-2 ml-4 mb-4"><span className="font-semibold">GST NO:</span> {companyInfo.gstNumber}</p>
           </div>
           <div className="hidden md:block">
             {/* <SearchProducts /> */}
